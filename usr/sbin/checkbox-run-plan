@@ -1,0 +1,128 @@
+#!/bin/bash
+set -x
+
+
+EXCLUDE=".*usb/storage-preinserted .*suspend/usb_storage_preinserted_after_suspend .*stress/cpu_stress_ng_test .*disk/disk_stress_.*"
+DEF_ENV="/etc/default/prepare-checkbox-sanity.conf"
+source $DEF_ENV
+
+usage() {
+cat << EOF
+usage: $0 options plan
+
+    options:
+        -h|--help           print this message
+        -e|--exclude-unites exclude unites
+                            e.g. -e ".*audio/alsa_record_playback_automated .*suspend/record_playback_after_suspend_auto"
+        --checkbox-conf     The path of checkbox.conf, refer to https://checkbox.readthedocs.io/en/latest/launcher-tutorial.html
+                            The default path will refer to CHECKBOX_CONF in $DEF_ENV
+                            See usage below for detail.
+        -b                  batch mode, which will go all default way.
+
+    plan:
+        pc_sanity_before_suspend
+            the plan in plainbox-provider-pc-sanity on ppa:oem-solutions-group/pc-sanity
+
+        pc_sanity_after_suspend
+            the plan in plainbox-provider-pc-sanity on ppa:oem-solutions-group/pc-sanity
+
+        stress-suspend-30-cycles-with-reboots-automated
+            the plan in plainbox-provider-checkbox
+
+        sru
+            the plan in plainbox-provider-sru
+
+        Or any plan in /usr/share/plainbox-provider-*/units could be used here as well.
+
+    usage:
+        run sru plan, and use the checkbox.conf from current folder
+        $0 sru --checkbox-conf \`pwd\`/checkbox.conf -b
+
+        run sru plan, and get the checkbox.conf from http://192.168.0.40/checkbox.conf
+        $0 sru --checkbox-conf http://192.168.0.40/checkbox.conf -b
+
+EOF
+exit 1
+}
+while [ $# -gt 0 ]
+do
+    case "$1" in
+        -h | --help)
+            usage 0
+            exit 0
+            ;;
+        -e | --exclude)
+            shift
+            [ -z "$1" ] && usage
+            EXCLUDE="$EXCLUDE $1"
+            ;;
+        --checkbox-conf)
+            shift
+            CHECKBOX_CONF="$1"
+            ;;
+        -b )
+            SILENCE="TRUE"
+            ;;
+        *)
+            [ -z "$1" ] && usage
+            if [ -z "${1##exclude = *}" ];then
+                # a back door for jenkins testflinger job
+                EXCLUDE="$EXCLUDE ${1##exclude = }"
+            else
+                PLAN=$1
+                echo "== you selected $PLAN =="
+            fi
+       esac
+       shift
+done
+
+[ -z "$PLAN" ] && usage
+
+interactive(){
+    echo "do you want to set the path of checkbox.conf? (refer to https://checkbox.readthedocs.io/en/latest/launcher-tutorial.html)"
+    read -p "(Y/N):" set_checkbox_conf
+    if [[ $set_checkbox_conf == [Yy] ]] ; then
+        read -p "path of checkbox.conf:" CHECKBOX_CONF
+    else
+        echo "Keep the checkbox.conf as default from $DEF_ENV"
+    fi
+}
+[ "$SILENCE" == "TRUE"  ] || interactive
+if [ -n "$CHECKBOX_CONF" ] && [ -z "${CHECKBOX_CONF##http*}" ]; then
+    mkdir -p $HOME/.cache/prepare-checkbox
+    wget $CHECKBOX_CONF -O $HOME/.cache/prepare-checkbox/checkbox.conf
+    CHECKBOX_CONF="$HOME/.cache/prepare-checkbox/checkbox.conf"
+fi
+
+# always use the latest plan
+if [ -z "${PLAN##pc*}" ]; then
+    sudo apt-get update; sudo apt-get install -y plainbox-provider-pc-sanity || true
+fi
+
+# prepare needed user environment
+mkdir -p $HOME/.local/share/plainbox
+ln -sf /usr/lib/prepare-checkbox-sanity/machine-manifest.json $HOME/.local/share/plainbox
+
+cat <<EOF > "$HOME/generated_launcher"
+#!/usr/bin/env checkbox-cli
+[launcher]
+launcher_version = 1
+
+[config]
+config_filename = $CHECKBOX_CONF
+
+[test plan]
+unit = com.canonical.certification::$PLAN
+forced = yes
+
+[test selection]
+forced = yes
+exclude = $EXCLUDE
+
+[ui]
+type = silent
+EOF
+echo "========= the checkbox launcher will be run ========="
+cat "$HOME/generated_launcher"
+echo "====================================================="
+checkbox-cli launcher "$HOME/generated_launcher"

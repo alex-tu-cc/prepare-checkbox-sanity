@@ -1,0 +1,8 @@
+[org.gnome.settings-daemon.plugins.power]
+sleep-inactive-ac-timeout=0
+[org.gnome.desktop.session]
+idle-delay=0
+[org.gnome.desktop.screensaver]
+ubuntu-lock-on-suspend=false
+lock-enabled=false
+idle-activation-enabled=false

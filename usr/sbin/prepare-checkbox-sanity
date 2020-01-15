@@ -1,0 +1,62 @@
+#!/bin/bash
+set -ex
+
+export DEBIAN_FRONTEND=noninteractive
+BASHER_PKG_NAME="alex-tu-cc/prepare-checkbox-sanity"
+usage() {
+cat << EOF
+usage: $0 options
+
+    -h|--help   print this message
+    --init      If you installed this package by baser from git repository directly,
+                Then you need to do this first to setup the environment.
+                If you install it by debian package, then all things be done automatically.
+    --dev       Get dev packages for plans under development from https://launchpad.net/~oem-solutions-group/+archive/ubuntu/pc-sanity-daily
+EOF
+exit 1
+}
+
+install_pkg_for_cmd(){
+    [ -n "$(which $1)" ] && return 0
+    sudo apt-get install -y $(apt-file search $1 | head -n1 |cut -d ':' -f1)
+}
+
+
+while [ $# -gt 0 ]
+do
+    case "$1" in
+        -h | --help)
+            usage 0
+            exit 0
+            ;;
+        --init)
+            [ -n "$(which basher)" ] && [ -d "$(basher package-path $BASHER_PKG_NAME)" ] || usage
+
+           # install needed packages from debian/control
+            install_pkg_for_cmd add-apt-repository
+            sudo -E add-apt-repository ppa:checkbox-dev/ppa -y || true
+            echo "postfix postfix/mailname string staging-server" | sudo debconf-set-selections
+            echo "postfix postfix/main_mailer_type string \'Internet Site\'" | sudo debconf-set-selections
+
+            cat $(basher package-path $BASHER_PKG_NAME)/debian/control | grep ^Depends | sed 's/,//g'| cut -d '}' -f2 | sudo xargs apt-get install -y apt-file
+            while read -r i; do
+                if [ -d /"$i" ]; then
+                    sudo cp -r $(basher package-path $BASHER_PKG_NAME)/"$i"/* /"$i"
+                else
+                    sudo cp -r $(basher package-path $BASHER_PKG_NAME)/"$i" /"$i"
+                fi
+            done < $(basher package-path $BASHER_PKG_NAME)/debian/install
+
+            sudo -E add-apt-repository ppa:oem-solutions-group/pc-sanity -y || true
+            # install somerville specific test plan
+            sudo -E apt-get install -y plainbox-provider-pc-sanity
+
+           ;;
+        *)
+        usage
+       esac
+       shift
+done
+
+echo "please reboot , then you can run checkbox with sru jobs by /usr/sbin/checkbox-run-plain \${plan under com.canonical.certification::}"
+echo "or \'/usr/sbin/checkbox-run-plain --help\' for detail usage"

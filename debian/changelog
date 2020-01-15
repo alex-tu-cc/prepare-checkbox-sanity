@@ -1,0 +1,7 @@
+prepare-checkbox-sanity (1.0.0) bionic; urgency=medium
+
+  * host package on checkbox-dev ppa
+  * let developer can install package by baser from
+    https://github.com/alex-tu-cc/prepare-checkbox-sanity
+
+ -- Alex Tu <alex.tu@canonical.com>  Wed, 15 Jan 2020 12:06:57 +0800

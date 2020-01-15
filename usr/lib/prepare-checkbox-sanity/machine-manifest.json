@@ -1,0 +1,1 @@
+{"com.canonical.certification::has_bt_smart": false, "com.canonical.certification::has_card_reader": false, "com.canonical.certification::has_thunderbolt": false, "com.canonical.certification::has_thunderbolt3": false, "com.canonical.certification::has_touchscreen": false, "com.canonical.certification::has_tpm2_chip": false, "com.canonical.certification::has_usb_type_c": false}

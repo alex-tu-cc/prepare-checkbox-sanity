@@ -1,0 +1,11 @@
+#!/bin/sh -e
+
+case "$1" in
+    configure)
+    if [ -e /etc/modprobe.d/prepare-checkbox-sanity-dkms.conf ];then
+        rm /etc/modprobe.d/prepare-checkbox-sanity-dkms.conf
+    fi
+    ;;
+esac
+
+#DEBHELPER#
