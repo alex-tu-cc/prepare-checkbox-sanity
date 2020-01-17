@@ -1,3 +1,9 @@
+prepare-checkbox-sanity (1.0.1) bionic; urgency=medium
+
+  * removed the neeed of interactive during apt-get install
+
+ -- Alex Tu <alex.tu@canonical.com>  Fri, 17 Jan 2020 17:02:54 +0800
+
 prepare-checkbox-sanity (1.0.0) bionic; urgency=medium
 
   * host package on checkbox-dev ppa
