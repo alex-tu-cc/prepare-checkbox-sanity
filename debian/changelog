@@ -1,6 +1,12 @@
+prepare-checkbox-sanity (1.0.2) bionic; urgency=medium
+
+  * refine to skip interactive
+
+ -- Alex Tu <alex.tu@canonical.com>  Sun, 23 Feb 2020 16:30:14 +0800
+
 prepare-checkbox-sanity (1.0.1) bionic; urgency=medium
 
-  * removed the neeed of interactive during apt-get install
+  * removed the need of interactive during apt-get install
 
  -- Alex Tu <alex.tu@canonical.com>  Fri, 17 Jan 2020 17:02:54 +0800
 
