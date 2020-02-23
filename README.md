@@ -1,9 +1,10 @@
-# prepare-checkbox-sanity
-prepare-checkbox-sanity
-This package is a wrapper to help people prepare the environment for PC sanity with checkbox.
-All operations are followed [checkbox document](checkbox.readthedocs.io/en/latest/).
+# Background
 
-## install
+[Checkbox](checkbox.readthedocs.io/en/latest/) is a flexible test automation software. It’s the main tool used in Ubuntu Certification program.
+
+prepare-checkbox-sanity is a wrapper to help people prepare the environment for PC sanity with checkbox and run plans easier.
+
+# Install
 
 ### by basher
 This is for develeper install it from github quickly.
@@ -31,8 +32,36 @@ Then you can just run any plan under com.canonical.certification:: category, e.g
 $ checkbox-run-plan sru -b
 ~~~
 
-## usage
-All usage can be refer to help.
+# Usage
+
+## Run a checkbox plan
+
+```
+$ checkbox-run-plan --help; # to get full view of help
+$ checkbox-cli list; # to get the supported test jobs and plans
+$ checkbox-run-plan ${plan}; # to run the plan you want
+```
+
+If the target plan need a [extrenal configuration](https://checkbox.readthedocs.io/en/latest/launcher-tutorial.html). It can be introduced by ``$ checkbox-run-plan ${plan} --checkbox-conf ${path of external configuration file}``.
+
+The location of configuration file can also be defined in _/etc/default/prepare-checkbox-sanity.conf_.
+```
+e.g.
+$ cat etc/default/prepare-checkbox-sanity.conf
+# save the default configuration in environment paramete.
+CHECKBOX_CONF=http://path-to-your-configuration-file/checkbox.conf
+```
+
+
+## A real example on run plan
+```
+$ checkbox-cli list | grep plan  | grep poweroff | grep auto
+        test plan 'com.canonical.certification::power-management-reboot-poweroff-cert-automated'
+        test plan 'com.canonical.certification::stress-30-reboot-poweroff-automated'
+$ checkbox-run-plan stress-30-reboot-poweroff-automated
+```
+
+## All usage can also be refered to help:
 
 
 ~~~ sh
