@@ -1,3 +1,9 @@
+prepare-checkbox-sanity (1.0.3) bionic; urgency=medium
+
+  * depends on plainbox-provider-pc-sanity
+
+ -- Alex Tu <alex.tu@canonical.com>  Tue, 25 Feb 2020 12:27:15 +0800
+
 prepare-checkbox-sanity (1.0.2) bionic; urgency=medium
 
   * refine to skip interactive
