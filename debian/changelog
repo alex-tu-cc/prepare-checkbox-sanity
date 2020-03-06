@@ -1,3 +1,9 @@
+prepare-checkbox-sanity (1.0.4) bionic; urgency=medium
+
+  * enable tpm by default.
+
+ -- Alex Tu <alex.tu@canonical.com>  Fri, 06 Mar 2020 19:13:55 +0800
+
 prepare-checkbox-sanity (1.0.3) bionic; urgency=medium
 
   * depends on plainbox-provider-pc-sanity
