@@ -1,3 +1,9 @@
+prepare-checkbox-sanity (1.0.5) bionic; urgency=medium
+
+  * remove the dependency of sru
+
+ -- Alex Tu <alex.tu@canonical.com>  Sat, 07 Mar 2020 16:30:15 +0800
+
 prepare-checkbox-sanity (1.0.4) bionic; urgency=medium
 
   * enable tpm by default.
