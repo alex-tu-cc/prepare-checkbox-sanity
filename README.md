@@ -72,6 +72,7 @@ $ checkbox-run-plan --help
 ```
 ## Tips for checkbox
 ## [checkbox remote](https://checkbox.readthedocs.io/en/latest/remote.html)
+## [side-loading proficders](https://checkbox.readthedocs.io/en/latest/side-loading.html)
 ```
 Invocation:
     Slave:
