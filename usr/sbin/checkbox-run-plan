@@ -2,7 +2,7 @@
 set -x
 
 
-EXCLUDE=".*usb/storage-preinserted .*suspend/usb_storage_preinserted_after_suspend .*stress/cpu_stress_ng_test .*disk/disk_stress_.*"
+EXCLUDE=""
 DEF_ENV="/etc/default/prepare-checkbox-sanity.conf"
 source $DEF_ENV
 
@@ -90,8 +90,11 @@ interactive(){
 [ "$SILENCE" == "TRUE"  ] || interactive
 if [ -n "$CHECKBOX_CONF" ] && [ -z "${CHECKBOX_CONF##http*}" ]; then
     mkdir -p $HOME/.cache/prepare-checkbox
-    wget $CHECKBOX_CONF -O $HOME/.cache/prepare-checkbox/checkbox.conf
-    CHECKBOX_CONF="$HOME/.cache/prepare-checkbox/checkbox.conf"
+    if wget --waitretry=5 -T 5 -t 3 $CHECKBOX_CONF -O $HOME/.cache/prepare-checkbox/checkbox.conf; then
+        CHECKBOX_CONF="$HOME/.cache/prepare-checkbox/checkbox.conf"
+    else
+        CHECKBOX_CONF="usr/lib/prepare-checkbox-sanity/fall-back-checkbox.conf"
+    fi
 fi
 
 # always use the latest plan
