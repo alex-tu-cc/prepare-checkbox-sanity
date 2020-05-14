@@ -1,6 +1,4 @@
 #!/bin/bash
-set -x
-
 
 EXCLUDE=""
 DEF_ENV="/etc/default/prepare-checkbox-sanity.conf"
@@ -42,8 +40,14 @@ usage: $0 options plan
         $0 sru --checkbox-conf http://192.168.0.40/checkbox.conf -b
 
 EOF
+}
+
+error(){
+usage
 exit 1
 }
+
+
 while [ $# -gt 0 ]
 do
     case "$1" in
@@ -53,7 +57,7 @@ do
             ;;
         -e | --exclude)
             shift
-            [ -z "$1" ] && usage
+            [ -z "$1" ] && error
             EXCLUDE="$EXCLUDE $1"
             ;;
         --checkbox-conf)
@@ -64,7 +68,7 @@ do
             SILENCE="TRUE"
             ;;
         *)
-            [ -z "$1" ] && usage
+            [ -z "$1" ] && error
             if [ -z "${1##exclude = *}" ];then
                 # a back door for jenkins testflinger job
                 EXCLUDE="$EXCLUDE ${1##exclude = }"
@@ -76,7 +80,7 @@ do
        shift
 done
 
-[ -z "$PLAN" ] && usage
+[ -z "$PLAN" ] && error
 
 interactive(){
     echo "do you want to set the path of checkbox.conf? (refer to https://checkbox.readthedocs.io/en/latest/launcher-tutorial.html)"
