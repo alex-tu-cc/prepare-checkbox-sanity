@@ -1,6 +1,6 @@
 # Background
 
-[Checkbox](checkbox.readthedocs.io/en/latest/) is a flexible test automation software. It’s the main tool used in Ubuntu Certification program.
+[Checkbox](https://checkbox.readthedocs.io/) is a flexible test automation software. It’s the main tool used in Ubuntu Certification program.
 
 prepare-checkbox-sanity is a wrapper to help people prepare the environment for PC sanity with checkbox and run plans easier.
 
@@ -59,53 +59,29 @@ $ checkbox-cli list | grep plan  | grep poweroff | grep auto
         test plan 'com.canonical.certification::power-management-reboot-poweroff-cert-automated'
         test plan 'com.canonical.certification::stress-30-reboot-poweroff-automated'
 $ checkbox-run-plan stress-30-reboot-poweroff-automated
+
+$ checkbox-cli list | grep plan  | grep tpm2 | grep auto
+# -b is to skip asking for configuration file
+$ checkbox-run-plan tpm2.0_3.0.4-automated -b
 ```
 
 ## All usage can also be refered to help:
-
-
-~~~ sh
+```sh
 $ prepare-checkbox-sanity --help
-usage: prepare-checkbox-sanity options
-
-    -h|--help   print this message
-    --init      If you installed this package by baser from git repository directly,
-                Then you need to do this first to setup the environment.
-                If you install it by debian package, then all things be done automatically.
-    --dev       Get dev packages for plans under development from https://launchpad.net/~oem-solutions-group/+archive/ubuntu/pc-sanity-daily
-
-$ prepare-checkbox-sanity --help
-usage: ./checkbox-run-plan options plan
-
-    options:
-        -h|--help           print this message
-        -e|--exclude-unites exclude unites
-                            e.g. -e ".*audio/alsa_record_playback_automated .*suspend/record_playback_after_suspend_auto"
-        --checkbox-conf     The path of checkbox.conf, refer to https://checkbox.readthedocs.io/en/latest/launcher-tutorial.html
-                            The default path will refer to CHECKBOX_CONF in /etc/default/prepare-checkbox-sanity.conf
-                            See usage below for detail.
-        -b                  batch mode, which will go all default way.
-
-    plan:
-        pc_sanity_before_suspend
-            the plan in plainbox-provider-pc-sanity on ppa:oem-solutions-group/pc-sanity
-
-        pc_sanity_after_suspend
-            the plan in plainbox-provider-pc-sanity on ppa:oem-solutions-group/pc-sanity
-
-        stress-suspend-30-cycles-with-reboots-automated
-            the plan in plainbox-provider-checkbox
-
-        sru
-            the plan in plainbox-provider-sru
-
-        Or any plan in /usr/share/plainbox-provider-*/units could be used here as well.
-
-    usage:
-        run sru plan, and use the checkbox.conf from current folder
-        ./checkbox-run-plan sru --checkbox-conf `pwd`/checkbox.conf -b
-
-        run sru plan, and get the checkbox.conf from http://192.168.0.40/checkbox.conf
-        ./checkbox-run-plan sru --checkbox-conf http://192.168.0.40/checkbox.conf -b
-
-~~~
+$ checkbox-run-plan --help
+```
+## Tips for checkbox
+## [checkbox remote](https://checkbox.readthedocs.io/en/latest/remote.html)
+## [side-loading proficders](https://checkbox.readthedocs.io/en/latest/side-loading.html)
+```
+Invocation:
+    Slave:
+$ checkbox-cli slave
+    Master:
+$ checkbox-cli master HOST [/PATH/TO/LAUNCHER]
+```
+## checkbox bootstrap
+```
+# checkbox-cli list-bootstrapped ${target-plan}
+$ checkbox-cli list-bootstrapped com.canonical.certification::client-cert-auto
+```
