@@ -101,9 +101,14 @@ if [ -n "$CHECKBOX_CONF" ] && [ -z "${CHECKBOX_CONF##http*}" ]; then
     fi
 fi
 
-# always use the latest plan
+# always use the latest plan if ineternet access is available.
 if [ -z "${PLAN##pc*}" ]; then
-    sudo apt-get update; sudo apt-get install -y plainbox-provider-pc-sanity || true
+    for r in 1 2 3; do
+        if ping -c 2 8.8.8.8; then
+            sudo apt-get update; sudo apt-get install -y plainbox-provider-pc-sanity
+            break
+        fi
+    done
 fi
 
 # prepare needed user environment
