@@ -97,7 +97,7 @@ if [ -n "$CHECKBOX_CONF" ] && [ -z "${CHECKBOX_CONF##http*}" ]; then
     if wget --waitretry=5 -T 5 -t 3 $CHECKBOX_CONF -O $HOME/.cache/prepare-checkbox/checkbox.conf; then
         CHECKBOX_CONF="$HOME/.cache/prepare-checkbox/checkbox.conf"
     else
-        CHECKBOX_CONF="usr/lib/prepare-checkbox-sanity/fall-back-checkbox.conf"
+        CHECKBOX_CONF="/usr/lib/prepare-checkbox-sanity/fall-back-checkbox.conf"
     fi
 fi
 
