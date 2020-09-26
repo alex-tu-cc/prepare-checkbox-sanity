@@ -71,8 +71,16 @@ $ prepare-checkbox-sanity --help
 $ checkbox-run-plan --help
 ```
 ## Tips for checkbox
-## [checkbox remote](https://checkbox.readthedocs.io/en/latest/remote.html)
+
 ## [side-loading proficders](https://checkbox.readthedocs.io/en/latest/side-loading.html)
+### An example to side load plainbox-provider-pc-sanity and your plainbox-provider-checkbox
+
+```
+$ prepare-checkbox-sanity --side-load https://git.launchpad.net/plainbox-provider-pc-sanity --side-load https://git.launchpad.net/~alextu/plainbox-provider-checkbox#test-cpu-pc10-by-turbostate
+```
+
+## [checkbox remote](https://checkbox.readthedocs.io/en/latest/remote.html)
+
 ```
 Invocation:
     Slave:

@@ -3,15 +3,17 @@ set -ex
 
 export DEBIAN_FRONTEND=noninteractive
 BASHER_PKG_NAME="alex-tu-cc/prepare-checkbox-sanity"
+declare -A side_load_repositories
 usage() {
 cat << EOF
-usage: $0 options
+usage: $0 [--init] [--side-load <URL of git repository>#<branch>]
 
     -h|--help   print this message
     --init      If you installed this package by baser from git repository directly,
                 Then you need to do this first to setup the environment.
                 If you install it by debian package, then all things be done automatically.
-    --dev       Get dev packages for plans under development from https://launchpad.net/~oem-solutions-group/+archive/ubuntu/pc-sanity-daily
+    --side-load To side load provider from specific git repository and branch.
+
 EOF
 exit 1
 }
@@ -53,11 +55,27 @@ do
             sudo -E apt-get install -y plainbox-provider-pc-sanity
 
            ;;
+        --side-load)
+            shift
+            [ -n "$1" ] || (echo [Error] "Please give a URL of git repository." && usage)
+            if [ -z "${1##*#*}" ]; then
+                side_load_repositories["${1%%#*}"]="${1##*#}"
+            else
+                side_load_repositories["$1"]="master"
+            fi
+            ;;
         *)
         usage
        esac
        shift
 done
 
+if [ "${#side_load_repositories[@]}" != "0" ]; then
+    mkdir -p /var/tmp/checkbox-providers
+    for git_rep in "${!side_load_repositories[@]}";do
+        echo "$git_rep"
+        git -C /var/tmp/checkbox-providers clone $git_rep -b "${side_load_repositories[$git_rep]}" --depth 1
+    done
+fi
 echo "please reboot , then you can run checkbox with sru jobs by /usr/sbin/checkbox-run-plain \${plan under com.canonical.certification::}"
 echo "or \'/usr/sbin/checkbox-run-plain --help\' for detail usage"
