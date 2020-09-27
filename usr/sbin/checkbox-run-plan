@@ -16,6 +16,7 @@ usage: $0 options plan
                             The default path will refer to CHECKBOX_CONF in $DEF_ENV
                             See usage below for detail.
         -b                  batch mode, which will go all default way.
+        -l                  list-bootstrapped for plain
 
     plan:
         pc_sanity_before_suspend
@@ -66,6 +67,9 @@ do
             ;;
         -b )
             SILENCE="TRUE"
+            ;;
+        -l )
+            checkbox-cli list-bootstrapped com.canonical.certification::$1
             ;;
         *)
             [ -z "$1" ] && error
