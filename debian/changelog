@@ -1,4 +1,4 @@
-prepare-checkbox-sanity (1.0.6) UNRELEASED; urgency=medium
+prepare-checkbox-sanity (1.0.6.1) focal; urgency=medium
 
   [ Alex Tu ]
   * autodpkgtest
@@ -7,7 +7,10 @@ prepare-checkbox-sanity (1.0.6) UNRELEASED; urgency=medium
   * usr/sbin/checkbox-run-plan: apt-get upgrade only when internet is
     available.
 
- -- Yuan-Chen Cheng <yc.cheng@canonical.com>  Wed, 09 Sep 2020 18:36:11 +0800
+  [ Alex Tu ]
+  * add checkbox provider side-load support
+
+ -- Alex Tu <alex.tu@canonical.com>  Tue, 29 Sep 2020 17:27:55 +0800
 
 prepare-checkbox-sanity (1.0.5) bionic; urgency=medium
 
