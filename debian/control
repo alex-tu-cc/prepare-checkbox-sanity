@@ -8,7 +8,7 @@ Vcs-Browser: https://github.com/alex-tu-cc/prepare-checkbox-sanity
 
 Package: prepare-checkbox-sanity
 Architecture: all
-Depends: ${misc:Depends}, fswebcam, obexftp, wmctrl, iperf, mesa-utils,  vim, openssh-server, pastebinit, apt-file, checkbox-ng, plainbox-provider-checkbox, plainbox-provider-resource-generic, plainbox-provider-certification-client, fwts, plainbox-provider-pc-sanity
+Depends: ${misc:Depends}, fswebcam, obexftp, wmctrl, iperf, mesa-utils,  vim, openssh-server, pastebinit, apt-file, checkbox-ng, plainbox-provider-checkbox, plainbox-provider-resource-generic, plainbox-provider-certification-client, fwts, plainbox-provider-pc-sanity, git
 XB-Modaliases: ${modaliases}
 Description: a wrapper for checkbox sanity.
  execute prepare-checkbox-sanity to prepare environment for sanity with checkbox.
