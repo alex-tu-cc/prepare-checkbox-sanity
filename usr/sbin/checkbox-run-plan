@@ -17,6 +17,7 @@ usage: $0 options plan
                             See usage below for detail.
         -b                  batch mode, which will go all default way.
         -l                  list-bootstrapped for plain
+        -s                  dry run. Just prepare all stuff without real run checkbox.
 
     plan:
         pc_sanity_before_suspend
@@ -72,6 +73,9 @@ do
             shift
             checkbox-cli list-bootstrapped com.canonical.certification::$1
             exit 0
+            ;;
+        -s )
+            DRYRUN="TRUE"
             ;;
         *)
             [ -z "$1" ] && error
@@ -143,4 +147,4 @@ EOF
 echo "========= the checkbox launcher will be run ========="
 cat "$HOME/generated_launcher"
 echo "====================================================="
-checkbox-cli launcher "$HOME/generated_launcher"
+[ "$DRYRUN" != "TRUE" ] && checkbox-cli launcher "$HOME/generated_launcher"
