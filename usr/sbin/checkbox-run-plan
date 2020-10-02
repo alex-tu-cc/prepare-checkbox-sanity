@@ -143,6 +143,9 @@ exclude = $EXCLUDE
 
 [ui]
 type = silent
+
+[daemon]
+normal_user = $USER
 EOF
 echo "========= the checkbox launcher will be run ========="
 cat "$HOME/generated_launcher"
