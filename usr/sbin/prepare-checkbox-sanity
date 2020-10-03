@@ -73,7 +73,8 @@ done
 if [ "${#side_load_repositories[@]}" != "0" ]; then
     mkdir -p /var/tmp/checkbox-providers
     for git_rep in "${!side_load_repositories[@]}";do
-        echo "$git_rep"
+        echo "Replace $(basename git_rep | cut -d '.' -f1) by $git_rep"
+        rm -rf $(basename git_rep | cut -d '.' -f1)
         yes|git -C /var/tmp/checkbox-providers clone $git_rep -b "${side_load_repositories[$git_rep]}"
     done
 fi
