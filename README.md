@@ -88,6 +88,15 @@ $ checkbox-cli slave
     Master:
 $ checkbox-cli master HOST [/PATH/TO/LAUNCHER]
 ```
+
+check-cli master can be run in a docker instance for convenient:
+
+```
+$ git clone https://git.launchpad.net/~hugh712/checkbox-ng
+$ cd checkbox-ng && ./setup.py install
+$ checkbox-cli master HOST [/PATH/TO/LAUNCHER]
+```
+
 ## checkbox bootstrap
 ```
 # checkbox-cli list-bootstrapped ${target-plan}
