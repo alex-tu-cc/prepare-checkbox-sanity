@@ -1,3 +1,11 @@
+prepare-checkbox-sanity (1.0.6.2) focal; urgency=medium
+
+  * remove existed side-loaded folders when giving side-load
+  * give normal user for pm_test rebooting
+  * add dry-run stop in runing checkbox tests
+
+ -- Alex Tu <alex.tu@canonical.com>  Mon, 12 Oct 2020 17:01:44 +0800
+
 prepare-checkbox-sanity (1.0.6.1) focal; urgency=medium
 
   [ Alex Tu ]
