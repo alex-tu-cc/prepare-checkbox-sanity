@@ -1,3 +1,9 @@
+prepare-checkbox-sanity (1.0.6.3) UNRELEASED; urgency=medium
+
+  * rename the bridge for default checkbox.conf
+
+ -- Alex Tu <alex.tu@canonical.com>  Tue, 03 Nov 2020 16:56:01 +0800
+
 prepare-checkbox-sanity (1.0.6.2) focal; urgency=medium
 
   * remove existed side-loaded folders when giving side-load
