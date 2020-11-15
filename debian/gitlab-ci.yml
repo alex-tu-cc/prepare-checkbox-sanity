@@ -1,0 +1,27 @@
+include:
+  - https://gitlab.com/alex-tu-cc/pipeline/-/raw/master-debug/salsa-ci.yml
+  - https://gitlab.com/hustle-ci/pipeline/raw/master/pipeline-jobs.yml
+
+variables:
+  SALSA_CI_EXTRA_REPOSITORY: |
+    deb http://ppa.launchpad.net/checkbox-dev/ppa/ubuntu focal main
+  SALSA_CI_EXTRA_REPOSITORY_KEY: |
+    -----BEGIN PGP PUBLIC KEY BLOCK-----
+
+    xo0ESZRIGAEEALihBkS1+WPsmLIq/y9i1Gc5vyPy7dqJVUscP38cjFsCnG8O+4Fe
+    P6mD/uJfVNBTcR3NjQ1jxwLISaIKndGu4J6n8xVPLWb/sesYy75WjgwUKC5lQnA6
+    1UElBm4AJfydKOobWTMq2X4Gw71+uwtjdnujn3uJGYDmrARHYCkAT7snABEBAAHN
+    JUxhdW5jaHBhZCBQUEEgZm9yIENoZWNrYm94IERldmVsb3BlcnPCtgQTAQIAIAUC
+    SZRIGAIbAwYLCQgHAwIEFQIIAwQWAgMBAh4BAheAAAoJEBtLay0rvfK9XKAEAJqo
+    rKQxdRidJTxMEirFmhaVD9plAqO/5uNXYFsVU0kSEEsk5Ps4F4lvLqWoupbPHuha
+    6ngtNJf5HFNoCivFWSLawTA4tfF9RGuPozDHEpTbdLPqfpOKpFd1I9KMiGEhzCrQ
+    Dp8cYjZkdMDEPsO9A87S5BxpB9rwBj9cnYnpvbw5
+    =bG3o
+    -----END PGP PUBLIC KEY BLOCK-----
+  RELEASE: 'focal'
+  SALSA_CI_AUTOPKGTEST_SETUP_CMDS: |
+    sudo apt-get install -y wget snapd software-properties-common &&  add-apt-repository -y -u -s ppa:checkbox-dev/ppa && export DEBIAN_FRONTEND=noninteractive
+
+piuparts:
+  allow_failure: true
+
