@@ -1,5 +1,5 @@
 include:
-  - https://gitlab.com/alex-tu-cc/pipeline/-/raw/master/salsa-ci.yml
+  - https://gitlab.com/alex-tu-cc/pipeline/-/raw/master-debug/salsa-ci.yml
   - https://gitlab.com/hustle-ci/pipeline/raw/master/pipeline-jobs.yml
 
 variables:
