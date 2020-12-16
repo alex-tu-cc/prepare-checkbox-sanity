@@ -1,0 +1,10 @@
+[
+    {
+        "repository": "https://gitlab.com/alex-tu-cc/plainbox-provider-checkbox.git",
+        "branch": "dev"
+    },
+    {
+        "repository": "https://gitlab.com/alex-tu-cc/plainbox-provider-resource.git",
+        "branch": "dev"
+    }
+]
