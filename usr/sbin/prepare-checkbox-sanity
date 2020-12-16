@@ -15,7 +15,7 @@ usage: $0 [--init] [--side-load <URL of git repository>#<branch>]
                         If you install it by debian package, then all things be done automatically.
     --side-load         To side load provider from specific git repository and branch.
                         e.g. to side load plainbox-provider-checkbox from a personal repository dev branch.
-                            $(basename $0) --side-load git@gitlab.com:alex-tu-cc/plainbox-provider-checkbox.git#dev
+                            $(basename "$0") --side-load git@gitlab.com:alex-tu-cc/plainbox-provider-checkbox.git#dev
     --side-load-conf    To side load based on a configuration.
                         e.g. $ cat sideload.json
                         [
@@ -28,7 +28,7 @@ usage: $0 [--init] [--side-load <URL of git repository>#<branch>]
                                 "branch": "dev"
                             }
                         ]
-                        $(basename $0) --side-load-conf {path}/sideload.json
+                        $(basename "$0") --side-load-conf {path}/sideload.json
 
 
 EOF
@@ -36,9 +36,9 @@ exit 1
 }
 
 install_pkg_for_cmd(){
-    [ -n "$(which $1)" ] && return 0
-    [ -n "$(which apt-file)" ] || sudo apt-get install -y apt-file && sudo apt-get update
-    sudo apt-get install -y $(apt-file search $1 | head -n1 |cut -d ':' -f1)
+    command -v "$1" && return 0
+    command -v apt-file || sudo apt-get install -y apt-file && sudo apt-get update
+    sudo apt-get install -y "$(apt-file search "$1" | head -n1 |cut -d ':' -f1)"
 }
 
 
@@ -50,7 +50,8 @@ do
             exit 0
             ;;
         --init)
-            [ -n "$(which basher)" ] && [ -d "$(basher package-path $BASHER_PKG_NAME)" ] || usage
+            command -v basher  || usage
+            [ -d "$(basher package-path $BASHER_PKG_NAME)" ] || usage
 
            # install needed packages from debian/control
             install_pkg_for_cmd add-apt-repository
@@ -58,14 +59,14 @@ do
             echo "postfix postfix/mailname string staging-server" | sudo debconf-set-selections
             echo "postfix postfix/main_mailer_type string \'Internet Site\'" | sudo debconf-set-selections
 
-            cat $(basher package-path $BASHER_PKG_NAME)/debian/control | grep ^Depends | sed 's/,//g'| cut -d '}' -f2 | sudo xargs apt-get install -y apt-file
+            grep ^Depends < "$(basher package-path "$BASHER_PKG_NAME")"/debian/control| sed 's/,//g'| cut -d '}' -f2 | sudo xargs apt-get install -y apt-file
             while read -r i; do
                 if [ -d /"$i" ]; then
-                    sudo cp -r $(basher package-path $BASHER_PKG_NAME)/"$i"/* /"$i"
+                    sudo cp -r "$(basher package-path "$BASHER_PKG_NAME")"/"$i"/* /"$i"
                 else
-                    sudo cp -r $(basher package-path $BASHER_PKG_NAME)/"$i" /"$i"
+                    sudo cp -r "$(basher package-path "$BASHER_PKG_NAME")"/"$i" /"$i"
                 fi
-            done < $(basher package-path $BASHER_PKG_NAME)/debian/install
+            done < "$(basher package-path $BASHER_PKG_NAME)"/debian/install
 
             sudo -E add-apt-repository ppa:oem-solutions-group/pc-sanity -y || true
             # install somerville specific test plan
@@ -74,7 +75,7 @@ do
            ;;
         --side-load)
             shift
-            [ -n "$1" ] || (echo [Error] "Please give a URL of git repository." && usage)
+            [ -n "$1" ] || (echo "[Error] Please give a URL of git repository." && usage)
             if [ -z "${1##*#*}" ]; then
                 side_load_repositories["${1%%#*}"]="${1##*#}"
             else
@@ -83,8 +84,8 @@ do
             ;;
         --side-load-conf)
             shift
-            [ -n "$1" ] || (echo [Error] "Please give a file for side-load checkbox providers." && usage)
-            [ -f "$1" ] || (echo [Error] "The given file not exist." && usage)
+            [ -n "$1" ] || (echo "[Error] Please give a file for side-load checkbox providers." && usage)
+            [ -f "$1" ] || (echo "[Error] The given file not exist." && usage)
             side_load_conf="$1"
             ;;
         *)
@@ -97,7 +98,7 @@ if [ "${#side_load_repositories[@]}" != "0" ]; then
     mkdir -p /var/tmp/checkbox-providers
     for git_rep in "${!side_load_repositories[@]}";do
         echo "Replace $(basename git_rep | cut -d '.' -f1) by $git_rep"
-        rm -rf $(basename git_rep | cut -d '.' -f1)
+        rm -rf "$(basename git_rep | cut -d '.' -f1)"
         yes|git -C /var/tmp/checkbox-providers clone $git_rep -b "${side_load_repositories[$git_rep]}"
     done
 fi
@@ -105,10 +106,10 @@ fi
 if [ -n "$side_load_conf" ]; then
     mkdir -p /var/tmp/checkbox-providers
     for i in $(seq 0 $(($(jq length "$side_load_conf")-1)) ); do
-        git_rep=$(jq -r ".[$i].repository" $side_load_conf)
-        git_br=$(jq -r ".[$i].branch" $side_load_conf)
-        rm -rf $(basename git_rep | cut -d '.' -f1)
-        yes|git -C /var/tmp/checkbox-providers clone $git_rep -b $git_br
+        git_rep=$(jq -r ".[$i].repository" "$side_load_conf")
+        git_br=$(jq -r ".[$i].branch" "$side_load_conf")
+        rm -rf "$(basename git_rep | cut -d '.' -f1)"
+        yes|git -C /var/tmp/checkbox-providers clone "$git_rep" -b "$git_br"
     done
 fi
 echo "please reboot , then you can run checkbox with sru jobs by /usr/sbin/checkbox-run-plain \${plan under com.canonical.certification::}"

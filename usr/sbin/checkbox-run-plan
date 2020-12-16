@@ -2,7 +2,8 @@
 
 EXCLUDE=""
 DEF_ENV="/etc/default/prepare-checkbox-sanity.conf"
-source $DEF_ENV
+# shellcheck disable=SC1090
+source "$DEF_ENV"
 
 usage() {
 cat << EOF
@@ -72,7 +73,7 @@ do
             ;;
         -l )
             shift
-            checkbox-cli list-bootstrapped com.canonical.certification::$1
+            checkbox-cli list-bootstrapped com.canonical.certification::"$1"
             exit 0
             ;;
         -s )
@@ -99,17 +100,17 @@ done
 
 interactive(){
     echo "do you want to set the path of checkbox.conf? (refer to https://checkbox.readthedocs.io/en/latest/launcher-tutorial.html)"
-    read -p "(Y/N):" set_checkbox_conf
+    read -p -r "(Y/N):" set_checkbox_conf
     if [[ $set_checkbox_conf == [Yy] ]] ; then
-        read -p "path of checkbox.conf:" CHECKBOX_CONF
+        read -p -r "path of checkbox.conf:" CHECKBOX_CONF
     else
         echo "Keep the checkbox.conf as default from $DEF_ENV"
     fi
 }
 [ "$SILENCE" == "TRUE"  ] || interactive
 if [ -n "$CHECKBOX_CONF" ] && [ -z "${CHECKBOX_CONF##http*}" ]; then
-    mkdir -p $HOME/.cache/prepare-checkbox
-    if wget --waitretry=5 -T 5 -t 3 $CHECKBOX_CONF -O $HOME/.cache/prepare-checkbox/checkbox.conf; then
+    mkdir -p "$HOME"/.cache/prepare-checkbox
+    if wget --waitretry=5 -T 5 -t 3 "$CHECKBOX_CONF" -O "$HOME"/.cache/prepare-checkbox/checkbox.conf; then
         CHECKBOX_CONF="$HOME/.cache/prepare-checkbox/checkbox.conf"
     else
         CHECKBOX_CONF="/usr/lib/prepare-checkbox-sanity/fall-back-checkbox.conf"
@@ -118,6 +119,7 @@ fi
 
 # always use the latest plan if ineternet access is available.
 if [ -z "${PLAN##pc*}" ]; then
+# shellcheck disable=SC2034
     for r in 1 2 3; do
         if ping -c 2 8.8.8.8; then
             sudo apt-get update; sudo apt-get install -y plainbox-provider-pc-sanity
@@ -127,8 +129,8 @@ if [ -z "${PLAN##pc*}" ]; then
 fi
 
 # prepare needed user environment
-mkdir -p $HOME/.local/share/plainbox
-ln -sf /usr/lib/prepare-checkbox-sanity/machine-manifest.json $HOME/.local/share/plainbox
+mkdir -p "$HOME"/.local/share/plainbox
+ln -sf /usr/lib/prepare-checkbox-sanity/machine-manifest.json "$HOME"/.local/share/plainbox
 
 cat <<EOF > "$HOME/generated_launcher"
 #!/usr/bin/env checkbox-cli
