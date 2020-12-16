@@ -84,7 +84,7 @@ do
         --side-load-conf)
             shift
             [ -n "$1" ] || (echo [Error] "Please give a file for side-load checkbox providers." && usage)
-            [ -f "$1"] || (echo [Error] "The given file not exist." && usage)
+            [ -f "$1" ] || (echo [Error] "The given file not exist." && usage)
             side_load_conf="$1"
             ;;
         *)
@@ -103,9 +103,10 @@ if [ "${#side_load_repositories[@]}" != "0" ]; then
 fi
 
 if [ -n "$side_load_conf" ]; then
+    mkdir -p /var/tmp/checkbox-providers
     for i in $(seq 0 $(($(jq length "$side_load_conf")-1)) ); do
-        git_rep=$(jq ".[$i].repository" $side_load_conf)
-        git_br=$(jq ".[$i].branch" $side_load_conf)
+        git_rep=$(jq -r ".[$i].repository" $side_load_conf)
+        git_br=$(jq -r ".[$i].branch" $side_load_conf)
         rm -rf $(basename git_rep | cut -d '.' -f1)
         yes|git -C /var/tmp/checkbox-providers clone $git_rep -b $git_br
     done
