@@ -18,8 +18,7 @@ usage: $0 options plan
         -b                  batch mode, which will go all default way.
         -l                  list-bootstrapped for plain
         -s                  dry run. Just prepare all stuff without real run checkbox.
-        --dev               side-load specific plainbox-providers from git tree to get cutting edge test cases.
-                            
+        --dev               side-load specific plainbox-providers from repositories in /usr/lib/prepare-checkbox-sanity/sideload.json
 
     plan:
         pc_sanity_before_suspend
@@ -78,6 +77,9 @@ do
             ;;
         -s )
             DRYRUN="TRUE"
+            ;;
+        --dev )
+            prepare-checkbox-sanity --side-load-conf /usr/lib/prepare-checkbox-sanity/sideload.json
             ;;
         *)
             [ -z "$1" ] && error
