@@ -18,6 +18,8 @@ usage: $0 options plan
         -b                  batch mode, which will go all default way.
         -l                  list-bootstrapped for plain
         -s                  dry run. Just prepare all stuff without real run checkbox.
+        --dev               side-load specific plainbox-providers from git tree to get cutting edge test cases.
+                            
 
     plan:
         pc_sanity_before_suspend

@@ -3,16 +3,33 @@ set -ex
 
 export DEBIAN_FRONTEND=noninteractive
 BASHER_PKG_NAME="alex-tu-cc/prepare-checkbox-sanity"
+side_load_conf=""
 declare -A side_load_repositories
 usage() {
 cat << EOF
 usage: $0 [--init] [--side-load <URL of git repository>#<branch>]
 
-    -h|--help   print this message
-    --init      If you installed this package by baser from git repository directly,
-                Then you need to do this first to setup the environment.
-                If you install it by debian package, then all things be done automatically.
-    --side-load To side load provider from specific git repository and branch.
+    -h|--help           print this message
+    --init              If you installed this package by baser from git repository directly,
+                        Then you need to do this first to setup the environment.
+                        If you install it by debian package, then all things be done automatically.
+    --side-load         To side load provider from specific git repository and branch.
+                        e.g. to side load plainbox-provider-checkbox from a personal repository dev branch.
+                            $(basename $0) --side-load git@gitlab.com:alex-tu-cc/plainbox-provider-checkbox.git#dev
+    --side-load-conf    To side load based on a configuration.
+                        e.g. $ cat sideload.json
+                        [
+                            {
+                                "repository": "https://gitlab.com/alex-tu-cc/plainbox-provider-checkbox.git",
+                                "branch": "dev"
+                            },
+                            {
+                                "repository": "https://gitlab.com/alex-tu-cc/plainbox-provider-resource.git",
+                                "branch": "dev"
+                            }
+                        ]
+                        $(basename $0) --side-load-conf {path}/sideload.json
+
 
 EOF
 exit 1
@@ -64,6 +81,12 @@ do
                 side_load_repositories["$1"]="master"
             fi
             ;;
+        --side-load-conf)
+            shift
+            [ -n "$1" ] || (echo [Error] "Please give a file for side-load checkbox providers." && usage)
+            [ -f "$1"] || (echo [Error] "The given file not exist." && usage)
+            side_load_conf="$1"
+            ;;
         *)
         usage
        esac
@@ -76,6 +99,15 @@ if [ "${#side_load_repositories[@]}" != "0" ]; then
         echo "Replace $(basename git_rep | cut -d '.' -f1) by $git_rep"
         rm -rf $(basename git_rep | cut -d '.' -f1)
         yes|git -C /var/tmp/checkbox-providers clone $git_rep -b "${side_load_repositories[$git_rep]}"
+    done
+fi
+
+if [ -n "$side_load_conf" ]; then
+    for i in $(seq 0 $(($(jq length "$side_load_conf")-1)) ); do
+        git_rep=$(jq ".[$i].repository" $side_load_conf)
+        git_br=$(jq ".[$i].branch" $side_load_conf)
+        rm -rf $(basename git_rep | cut -d '.' -f1)
+        yes|git -C /var/tmp/checkbox-providers clone $git_rep -b $git_br
     done
 fi
 echo "please reboot , then you can run checkbox with sru jobs by /usr/sbin/checkbox-run-plain \${plan under com.canonical.certification::}"
