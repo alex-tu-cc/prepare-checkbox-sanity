@@ -16,7 +16,7 @@ usage: $0 [--init] [--side-load <URL of git repository>#<branch>]
     --side-load         To side load provider from specific git repository and branch.
                         e.g. to side load plainbox-provider-checkbox from a personal repository dev branch.
                             $(basename $0) --side-load git@gitlab.com:alex-tu-cc/plainbox-provider-checkbox.git#dev
-    --side-load-conf    To side load based on a configuration.
+    --side-load-conf    To side load based on a configuration. [Warning] Everything under var/tmp/checkbox-providers/ will be removed.
                         e.g. $ cat sideload.json
                         [
                             {
@@ -103,6 +103,7 @@ if [ "${#side_load_repositories[@]}" != "0" ]; then
 fi
 
 if [ -n "$side_load_conf" ]; then
+    rm -rf /var/tmp/checkbox-providers
     mkdir -p /var/tmp/checkbox-providers
     for i in $(seq 0 $(($(jq length "$side_load_conf")-1)) ); do
         git_rep=$(jq -r ".[$i].repository" $side_load_conf)

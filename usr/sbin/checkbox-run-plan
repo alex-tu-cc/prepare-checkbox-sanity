@@ -19,6 +19,7 @@ usage: $0 options plan
         -l                  list-bootstrapped for plain
         -s                  dry run. Just prepare all stuff without real run checkbox.
         --dev               side-load specific plainbox-providers from repositories in /usr/lib/prepare-checkbox-sanity/sideload.json
+			    [Warning] folders under /var/tmp/checkbox-providers/ will be removed before side-load.
 
     plan:
         pc_sanity_before_suspend
