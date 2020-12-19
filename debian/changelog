@@ -1,3 +1,11 @@
+prepare-checkbox-sanity (1.0.7) focal; urgency=medium
+
+  * ability to side-load multiple providers by conf
+  * fix shellcheck
+  * sync the gitlab-ci.yml from pc-sanity
+
+ -- Alex Tu <alex.tu@canonical.com>  Sat, 19 Dec 2020 18:10:13 +0800
+
 prepare-checkbox-sanity (1.0.6.3) focal; urgency=medium
 
   * rename the bridge for default checkbox.conf
