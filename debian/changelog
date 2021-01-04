@@ -1,3 +1,9 @@
+prepare-checkbox-sanity (1.0.7.1) UNRELEASED; urgency=medium
+
+  * bump version
+
+ -- Alex Tu <alex.tu@canonical.com>  Mon, 04 Jan 2021 14:00:52 +0800
+
 prepare-checkbox-sanity (1.0.7) focal; urgency=medium
 
   * ability to side-load multiple providers by conf
