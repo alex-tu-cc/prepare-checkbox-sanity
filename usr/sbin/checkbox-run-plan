@@ -128,6 +128,7 @@ if [ -z "${PLAN##pc*}" ]; then
     done
 fi
 
+[ -z "$CHECKBOX_CONF" ] || {external_conf="$(cat $CHECKBOX_CONF)";}
 # prepare needed user environment
 mkdir -p "$HOME"/.local/share/plainbox
 ln -sf /usr/lib/prepare-checkbox-sanity/machine-manifest.json "$HOME"/.local/share/plainbox
@@ -153,6 +154,8 @@ type = silent
 
 [daemon]
 normal_user = $USER
+
+$external_conf
 EOF
 echo "========= the checkbox launcher will be run ========="
 cat "$HOME/generated_launcher"
