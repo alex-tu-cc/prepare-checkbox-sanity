@@ -128,7 +128,7 @@ if [ -z "${PLAN##pc*}" ]; then
     done
 fi
 
-[ -z "$CHECKBOX_CONF" ] || {external_conf="$(cat $CHECKBOX_CONF)";}
+external_conf="$(cat $CHECKBOX_CONF| grep -v 'checkbox-cli')"
 # prepare needed user environment
 mkdir -p "$HOME"/.local/share/plainbox
 ln -sf /usr/lib/prepare-checkbox-sanity/machine-manifest.json "$HOME"/.local/share/plainbox
@@ -137,9 +137,6 @@ cat <<EOF > "$HOME/generated_launcher"
 #!/usr/bin/env checkbox-cli
 [launcher]
 launcher_version = 1
-
-[config]
-config_filename = $CHECKBOX_CONF
 
 [test plan]
 unit = com.canonical.certification::$PLAN
