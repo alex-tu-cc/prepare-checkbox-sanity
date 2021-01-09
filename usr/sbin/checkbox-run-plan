@@ -51,6 +51,13 @@ usage
 exit 1
 }
 
+# to get the needed excluding from side-loaded folders.
+get_exclude_from_side_load() {
+    local exclude_from_side_load
+    [ -d "/var/tmp/checkbox-providers/" ] || return 0
+    exclude_from_side_load="$(cat /var/tmp/checkbox-providers/*/side-load-changes.json | jq -r ".need_exclude" | xargs)" || true
+    EXCLUDE="$EXCLUDE $exclude_from_side_load"
+}
 
 while [ $# -gt 0 ]
 do
@@ -82,6 +89,7 @@ do
         --dev )
             [ -f /usr/lib/prepare-checkbox-sanity/sideload.json ] || error "/usr/lib/prepare-checkbox-sanity/sideload.json is not there."
             prepare-checkbox-sanity --side-load-conf /usr/lib/prepare-checkbox-sanity/sideload.json
+            get_exclude_from_side_load
             ;;
         *)
             [ -z "$1" ] && error

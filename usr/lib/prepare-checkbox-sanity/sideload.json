@@ -6,5 +6,9 @@
     {
         "repository": "https://gitlab.com/alex-tu-cc/plainbox-provider-resource.git",
         "branch": "dev"
+    },
+    {
+        "repository": "https://gitlab.com/alex-tu-cc/plainbox-provider-pc-sanity.git",
+        "branch": "dev"
     }
 ]
