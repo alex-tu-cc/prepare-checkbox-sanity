@@ -110,6 +110,7 @@ if [ -n "$side_load_conf" ]; then
         git_br=$(jq -r ".[$i].branch" "$side_load_conf")
         rm -rf "$(basename git_rep | cut -d '.' -f1)"
         yes|git -C /var/tmp/checkbox-providers clone "$git_rep" -b "$git_br"
+        git -C /var/tmp/checkbox-providers/"$(cut -d '.' -f1 < <(basename "$git_rep"))" rev-parse --short HEAD
     done
 fi
 echo "please reboot , then you can run checkbox with sru jobs by /usr/sbin/checkbox-run-plain \${plan under com.canonical.certification::}"
