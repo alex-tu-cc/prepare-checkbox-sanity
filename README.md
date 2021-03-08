@@ -16,7 +16,7 @@ $ basher prepare-checkbox-sanity --init
 
 Then you can just run any plan under com.canonical.certification:: category, e.g.
 ~~~ sh
-$ checkbox-run-plan sru -b
+$ checkbox-run-plan pc-sanity-smoke-test -b
 ~~~
 
 ### by debian package
