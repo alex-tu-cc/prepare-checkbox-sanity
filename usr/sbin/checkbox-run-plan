@@ -2,6 +2,7 @@
 
 EXCLUDE=""
 DEF_ENV="/etc/default/prepare-checkbox-sanity.conf"
+DEV_MODE="yes"
 # shellcheck disable=SC1090
 source "$DEF_ENV"
 
@@ -19,7 +20,10 @@ usage: $0 options plan
         -b                  batch mode, which will go all default way.
         -l                  list-bootstrapped for plain
         -s                  dry run. Just prepare all stuff without real run checkbox.
-        --dev               side-load specific plainbox-providers from repositories in /usr/lib/prepare-checkbox-sanity/sideload.json
+        --dev               When provided value "yes" then it prepares the needed providers under /var/tmp/checkbox-providers
+                            to side-load specific plainbox-providers from repositories in /usr/lib/prepare-checkbox-sanity/sideload.json
+                            When provided value "no" then it will not do any additional change for /var/tmp/checkbox-providers. The
+                            default value is "yes".
 
     plan:
         pc_sanity_before_suspend
@@ -87,9 +91,9 @@ do
             DRYRUN="TRUE"
             ;;
         --dev )
-            [ -f /usr/lib/prepare-checkbox-sanity/sideload.json ] || error "/usr/lib/prepare-checkbox-sanity/sideload.json is not there."
-            prepare-checkbox-sanity --side-load-conf /usr/lib/prepare-checkbox-sanity/sideload.json
-            get_exclude_from_side_load
+            shift
+            [ -z "$1" ] && error
+            DEV_MODE="$1"
             ;;
         *)
             [ -z "$1" ] && error
@@ -140,6 +144,12 @@ external_conf="$(cat $CHECKBOX_CONF| grep -v 'checkbox-cli')"
 # prepare needed user environment
 mkdir -p "$HOME"/.local/share/plainbox
 ln -sf /usr/lib/prepare-checkbox-sanity/machine-manifest.json "$HOME"/.local/share/plainbox
+
+if [ "$DEV_MODE" = "yes" ]; then
+    [ -f /usr/lib/prepare-checkbox-sanity/sideload.json ] || error "/usr/lib/prepare-checkbox-sanity/sideload.json is not there."
+    prepare-checkbox-sanity --side-load-conf /usr/lib/prepare-checkbox-sanity/sideload.json
+    get_exclude_from_side_load
+fi
 
 cat <<EOF > "$HOME/generated_launcher"
 #!/usr/bin/env checkbox-cli
