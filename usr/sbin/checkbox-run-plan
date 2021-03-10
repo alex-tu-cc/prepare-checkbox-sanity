@@ -26,27 +26,23 @@ usage: $0 options plan
                             default value is "yes".
 
     plan:
-        pc_sanity_before_suspend
-            the plan in plainbox-provider-pc-sanity on ppa:oem-solutions-group/pc-sanity
-
-        pc_sanity_after_suspend
-            the plan in plainbox-provider-pc-sanity on ppa:oem-solutions-group/pc-sanity
-
-        stress-suspend-30-cycles-with-reboots-automated
-            the plan in plainbox-provider-checkbox
-
         sru
             the plan in plainbox-provider-sru
+
+        pc-sanity-smoke-test
+            the plan in plainbox-provider-pc-sanity on ppa:oem-solutions-group/pc-sanity
 
         Or any plan in /usr/share/plainbox-provider-*/units could be used here as well.
 
     usage:
-        run sru plan, and use the checkbox.conf from current folder
-        $0 sru --checkbox-conf \`pwd\`/checkbox.conf -b
+        run pc-sanity-smoke-test plan, and use the checkbox.conf from current folder
+        $0 pc-sanity-smoke-test --checkbox-conf \`pwd\`/checkbox.conf -b
 
         run sru plan, and get the checkbox.conf from http://192.168.0.40/checkbox.conf
         $0 sru --checkbox-conf http://192.168.0.40/checkbox.conf -b
 
+        run pc-sanity-smoke-test plan, and excludee all tests related to auto switch graphics.
+        checkbox-run-plan -e com.canonical.certification::.*auto_switch_card.* -e com.canonical.certification::suspend/1_.* -e com.canonical.certification::suspend/2_.* pc-sanity-smoke-test -b
 EOF
 }
 
