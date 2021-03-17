@@ -6,12 +6,28 @@ prepare-checkbox-sanity is a wrapper to help people prepare the environment for 
 
 # Install
 
+### by debian package
+This package is hosted on [checkbox-dev][], install this packge from [checkbox-dev][] will get all packges under development.
+~~~ sh
+sudo add-apt-repository ppa:checkbox-dev/ppa
+sudo apt-get update
+sudo apt-get install prepare-checkbox-sanity
+~~~
+
+The packages which verified by my machine pool will be copied to ppa:oem-taipei-bot/checkbox-snapshot.
+So, you can get verified packages there.
+~~~ sh
+sudo add-apt-repository ppa:oem-taipei-bot/checkbox-snapshot
+sudo apt-get update
+sudo apt-get install prepare-checkbox-sanity
+~~~
+
 ### by basher
 This is for develeper install it from github quickly.
 The target machine is assumed installed [basher](https://github.com/basherpm/basher/blob/master/README.md)
 ~~~ sh
 $ basher install alex-tu-cc/prepare-checkbox-sanity
-$ basher prepare-checkbox-sanity --init
+$ basher prepare-checkbox-sanity --init # it will install packages from ppa:oem-taipei-bot/checkbox-snapshot
 ~~~
 
 Then you can just run any plan under com.canonical.certification:: category, e.g.
@@ -19,13 +35,7 @@ Then you can just run any plan under com.canonical.certification:: category, e.g
 $ checkbox-run-plan pc-sanity-smoke-test -b
 ~~~
 
-### by debian package
-this package is hosted on [checkbox-dev](https://launchpad.net/~checkbox-dev/+archive/ubuntu/ppa)
-~~~ sh
-sudo add-apt-repository ppa:checkbox-dev/ppa
-sudo apt-get update
-sudo apt-get install prepare-checkbox-sanity
-~~~
+
 
 Then you can just run any plan under com.canonical.certification:: category, e.g.
 ~~~ sh
@@ -102,3 +112,5 @@ $ checkbox-cli master HOST [/PATH/TO/LAUNCHER]
 # checkbox-cli list-bootstrapped ${target-plan}
 $ checkbox-cli list-bootstrapped com.canonical.certification::client-cert-auto
 ```
+
+[checkbox-dev]: https://launchpad.net/~checkbox-dev/+archive/ubuntu/ppa

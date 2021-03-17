@@ -55,7 +55,8 @@ do
 
            # install needed packages from debian/control
             install_pkg_for_cmd add-apt-repository
-            sudo -E add-apt-repository ppa:checkbox-dev/ppa -y || true
+            #sudo -E add-apt-repository ppa:checkbox-dev/ppa -y || true
+            sudo -E add-apt-repository ppa:oem-taipei-bot/checkbox-snapshot -y || true
             echo "postfix postfix/mailname string staging-server" | sudo debconf-set-selections
             echo "postfix postfix/main_mailer_type string \'Internet Site\'" | sudo debconf-set-selections
 
